@@ -60,3 +60,6 @@ target/
 
 #Testing Database
 db.sqlite3
+
+#swap files
+*.swp
