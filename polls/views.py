@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import Http404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 #url(r'(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
 #example url /polls/5/vote/
 #url(r'(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
@@ -16,11 +17,11 @@ def index(request):
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'quesiton': question})
+    return render(request, 'polls/detail.html', {'question': question})
 
 def results(request, question_id):
-    response = "You're looking at the resutls of question %s."
-    return HttpResponse(response % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html', {'question':question}) 
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -38,5 +39,5 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a 
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(qeustion.id,)))
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
     return HttpResponse("You're voting on question %s." % question_id)
